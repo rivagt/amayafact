@@ -9,12 +9,20 @@ class XmlController extends Controller
 {
     public function createXML()
     {
+        $document = $_REQUEST['serie_boleta'];
+        date_default_timezone_set('America/Lima');
+        $date = $_REQUEST['date_emited'];
+        $time = date('h:i:s a', time());
+        $digvalue = hash_init('sha1');
+        // $time = $_REQUEST['time_emited'];
+
         header('Content-Type: text/html; charset=UTF-8');
         echo '<div style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16pt; color: #000000; margin-bottom: 10px;">';
         echo 'Prueba Boleta electronica Amaya.<br>';
-        echo '<span style="color: #000099; font-size: 15pt;">Crear archivo .XML correspondiente a la factura  electrónica.</span>';
+        echo '<span style="color: #000099; font-size: 15pt;">Crear archivo .XML correspondiente a la boleta electronica.</span>';
         echo '<hr width="100%"></div>';
         $xml = new DOMDocument('1.0', "UTF-8");
+
         $xml->preserveWhiteSpace = false;
 
 		$invoice = $xml->createElement('Invoice');
@@ -72,7 +80,7 @@ $digestmethod = $xml->createElement('ds:DigestMethod');
 $reference->appendChild($digestmethod);
 $digestmethod->setAttribute('Algorithm','http://www.w3.org/2000/09/xmldsig#sha1');
 
-$digestvalue = $xml->createElement('ds:DigestValue','Valor de DigestValue');
+$digestvalue = $xml->createElement('ds:DigestValue', 'asds');
 $reference->appendChild($digestvalue);
 
 $signaturevalue = $xml->createElement('ds:SignatureValue','Valor de signature');
@@ -103,13 +111,13 @@ $profileid->setAttribute('schemeAgencyName','PE:SUNAT');
 $profileid->setAttribute('schemeURI','urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo17');
 
 //Codigo y serie de boleta
-$idboleta = $xml->createElement('cbc:ID','SerieBoleta');
+$idboleta = $xml->createElement('cbc:ID',$document);
 $invoice->appendChild($idboleta);
 
 //Fecha y hora de emision
-$fechaemision = $xml->createElement('cbc:IssueDate','fecha de emision');
+$fechaemision = $xml->createElement('cbc:IssueDate', $date);
 $invoice->appendChild($fechaemision);
-$horaemision = $xml->createElement('cbc:IssueTime','horaemision');
+$horaemision = $xml->createElement('cbc:IssueTime', $time);
 $invoice->appendChild($horaemision);
 
 //Codigo para tipo de documento
@@ -505,10 +513,10 @@ $i=0;
 $xml->formatOutput = true;
 $strings_xml = $xml->saveXML();
 
-$xml->save('../public/boletaprueba.xml');
-chmod('../public/boletaprueba.xml', 0777);
+$xml->save('../public/boletapruebas.xml');
+chmod('../public/boletapruebas.xml', 0777);
 $status = 'Buscar en :';
-return $status;
+return back();
         // $request = 1;
         // if($request==1){
         //     return "Successfully";

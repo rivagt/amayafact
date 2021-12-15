@@ -19,14 +19,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/dashboard');
 });
-Route::get('/dashboard/sales/boleta', [SaleController::class , 'lookboleta']);
-Route::get('/dashboard/sales/factura', [SaleController::class , 'lookfactura']);
+Route::get('/dashboard/sales/boleta', [SaleController::class , 'lookboleta'])->name('dash.boleta');
+Route::get('/dashboard/sales/boleta/{code}', [SaleController::class , 'pdfboleta'])->name('dash.pdfboleta');
+Route::get('/dashboard/sales/factura', [SaleController::class , 'lookfactura'])->name('dash.factura');
+Route::post('/dashboard/sales/boleta', [SaleController::class , 'storeBoleta'])->name('boleta.store');
 Route::get('/dashboard/welcome', function() {
     return view('welcome.tabwelcome');
 });
 Route::post('/createXML', [XmlController::class, 'createXML']);
 Route::get('/clients/dni', [ClienteController::class , 'lookdni']);
 Route::get('/clients/ruc', [ClienteController::class , 'lookruc']);
+
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard.index');

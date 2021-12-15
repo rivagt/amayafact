@@ -5,7 +5,7 @@
 @section('classes_sidebar','d-none')
 
 @section('content_header')
-    <h1>Factura N°</h1>
+    <h1 id="h1codef"></h1>
     {{-- <input type="text" name="dni" onfocusout="lookdni(this.value)" maxlength="11"> --}}
     <input type="text" name="dni" id="nameclient" disabled>
     {{-- <form action="/createXML" method="post">
@@ -52,6 +52,7 @@
         "pagingType": "full_numbers"
 
     } );
+    mostrarfactura();
 
     } );
     function lookdni(dni){
@@ -95,6 +96,40 @@
                 console.log(data);
             },
         );
+    }
+    function mostrarfactura(){
+        var codefactura = String({{ $code_factura }});
+        var opc = codefactura.length;
+        if(opc<1){
+            $("#h1codef").text("F001-00000001");
+        }else{
+            switch(opc){
+            case 1:
+            $("#h1codef").text("F001-0000000"+codefactura);
+            break;
+            case 2:
+            $("#h1codef").text("F001-000000"+codefactura);
+            break;
+            case 3:
+            $("#h1codef").text("F001-00000"+codefactura);
+            break;
+            case 4:
+            $("#h1codef").text("F001-0000"+codefactura);
+            break;
+            case 5:
+            $("#h1codef").text("F001-000"+codefactura);
+            break;
+            case 6:
+            $("#h1codef").text("F001-00"+codefactura);
+            break;
+            case 7:
+            $("#h1codef").text("F001-0"+codefactura);
+            break;
+            case 8:
+            $("#h1codef").text("F001-"+codefactura);
+            break;
+            }
+        }
     }
 </script>
 @stop
